@@ -16,7 +16,7 @@ def addtext(img, cords, colour,title_text, text_size):
     title_font = ImageFont.truetype(local_font,text_size)
     img.text(cords, title_text,colour, font=title_font)
 
-def lambda_handler(event,context):
+def download_from_s3():
     image_bucket = os.environ.get("image_bucket")
     image_key = os.environ.get("image_key")
     print(image_bucket,image_key)
@@ -27,19 +27,12 @@ def lambda_handler(event,context):
     print(font_bucket,font_key)
     s3.Bucket(font_bucket).download_file(font_key, local_font)
 
-    print(event)
-    if "queryStringParameters" not in event:
-        print("please pass in 'name', 'role' and 'social'")
-        return {
-        "isBase64Encoded": False,
-        "statusCode": 200,
-        "body": "please pass in 'name', 'role' and 'social'"
-    }
-    name = str(event["queryStringParameters"]["name"] if "name" in event["queryStringParameters"] else " ") 
+def buildImage(params):
+    name = str(params["name"] if "name" in params else " ") 
     print(name)
-    role = str(event["queryStringParameters"]["role"] if "role" in event["queryStringParameters"] else " ") 
+    role = str(params["role"] if "role" in params else " ") 
     print(role)
-    social = str(event["queryStringParameters"]["social"] if "social" in event["queryStringParameters"] else " ") 
+    social = str(params["social"] if "social" in params else " ") 
     print(social)
     img = Image.open(local_img)
 
@@ -50,6 +43,23 @@ def lambda_handler(event,context):
     addtext(image_editable, cords= (700,100),colour = (0,0,0),title_text=name,text_size=190)
     addtext(image_editable, cords= (700,370),colour = (0,0,0),title_text=role,text_size=100)
     addtext(image_editable, cords= (650,480),colour = (255,255,255),title_text=social,text_size=70)
+    return img
+    
+    
+
+def lambda_handler(event,context):
+    download_from_s3()
+    print(event)
+    if "queryStringParameters" not in event:
+        print("please pass in 'name', 'role' and 'social'")
+        return {
+        "isBase64Encoded": False,
+        "statusCode": 200,
+        "body": "please pass in 'name', 'role' and 'social'"
+    }
+
+    img = buildImage(event["queryStringParameters"])
+
     bufferd = BytesIO()
     img.save(bufferd, format="png")
     img_str = base64.b64encode(bufferd.getvalue())
@@ -61,8 +71,3 @@ def lambda_handler(event,context):
         },
         "body": img_str
     }
-
-# if os.environ.get("AWS_EXECUTION_ENV") is not None:
-#     lambda_handler()
-#     img.save("src/fmt.png")
-
