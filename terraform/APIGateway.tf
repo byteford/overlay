@@ -7,6 +7,11 @@ resource "aws_apigatewayv2_stage" "overlay" {
   api_id      = aws_apigatewayv2_api.this.id
   name        = "overlay"
   auto_deploy = true
+  default_route_settings {
+    detailed_metrics_enabled = true
+    throttling_burst_limit   = 100
+    throttling_rate_limit    = 100
+  }
 }
 
 

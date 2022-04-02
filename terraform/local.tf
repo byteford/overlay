@@ -1,3 +1,3 @@
-locals{
-    lowerthird_generator_url = "lowerthird"
+locals {
+  lowerthird_generator_url = "lowerthird"
 }
