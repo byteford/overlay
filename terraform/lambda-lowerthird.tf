@@ -87,7 +87,7 @@ resource "aws_lambda_function" "lowerthird_generator" {
   tracing_config {
     mode = "Active"
   }
-
+}
 resource "aws_lambda_permission" "lowerthird_generator" {
   statement_id  = "apiGatewayallow"
   action        = "lambda:InvokeFunction"
