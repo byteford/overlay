@@ -94,6 +94,7 @@ resource "aws_lambda_function" "overlay_generator" {
   tracing_config {
     mode = "Active"
   }
+
 }
 
 resource "aws_lambda_permission" "overlay_generator" {
