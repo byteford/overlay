@@ -22,5 +22,5 @@ resource "aws_apigatewayv2_integration" "this" {
   integration_type = "AWS_PROXY"
   connection_type  = "INTERNET"
   payload_format_version = "2.0"
-  integration_uri    = aws_lambda_function.this.invoke_arn
+  integration_uri    = aws_lambda_function.lowerthird_generator.invoke_arn
 }

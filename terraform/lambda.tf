@@ -50,9 +50,9 @@ resource "aws_iam_role_policy_attachment" "lambda_logs" {
   role       = aws_iam_role.iam_for_lambda.name
   policy_arn = aws_iam_policy.lambda.arn
 }
-resource "aws_lambda_function" "this" {
+resource "aws_lambda_function" "lowerthird_generator" {
   image_uri     = "${aws_ecr_repository.lowerthird.repository_url}:latest"
-  function_name = "lowerthird"
+  function_name = "lowerthird_generator"
   role          = aws_iam_role.iam_for_lambda.arn
   package_type  = "Image"
   timeout       = 10
@@ -69,7 +69,7 @@ resource "aws_lambda_function" "this" {
 resource "aws_lambda_permission" "this" {
   statement_id  = "apiGatewayallow"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.this.function_name
+  function_name = aws_lambda_function.lowerthird_generator.function_name
   principal     = "apigateway.amazonaws.com"
 
   # The /*/*/* part allows invocation from any stage, method and resource path
