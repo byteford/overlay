@@ -70,6 +70,7 @@ resource "aws_lambda_permission" "this" {
   statement_id  = "apiGatewayallow"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.lowerthird_generator.function_name
+
   principal     = "apigateway.amazonaws.com"
 
   # The /*/*/* part allows invocation from any stage, method and resource path
