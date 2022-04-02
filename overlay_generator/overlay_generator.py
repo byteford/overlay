@@ -16,8 +16,8 @@ def lambda_handler(event, context):
     }
     
     overlay = event["queryStringParameters"]["overlay"]
-    
-    res = client.get_item(TableName="lowerthird", Key={"Index": {'S': overlay}})
+    TableName = os.environ["lowerthird_table"]
+    res = client.get_item(TableName=TableName, Key={"Index": {'S': overlay}})
 
 
     user = "name=" +get_res_item(res,'FullName') +"&role="+ get_res_item(res,"Role")+"&social=" + get_res_item(res,'Social')

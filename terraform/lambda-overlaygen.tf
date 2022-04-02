@@ -35,6 +35,26 @@ resource "aws_iam_policy" "overlay_generator" {
       },
       {
         Action = [
+          "xray:GetSamplingStatisticSummaries",
+          "xray:PutTelemetryRecords",
+          "xray:GetTraceGraph",
+          "xray:GetServiceGraph",
+          "xray:GetInsightImpactGraph",
+          "xray:GetInsightSummaries",
+          "xray:GetSamplingTargets",
+          "xray:PutTraceSegments",
+          "xray:GetTimeSeriesServiceStatistics",
+          "xray:GetEncryptionConfig",
+          "xray:GetSamplingRules",
+          "xray:GetInsight",
+          "xray:GetInsightEvents",
+          "xray:GetTraceSummaries"
+        ]
+        Resource = "*"
+        Effect   = "Allow"
+      },
+      {
+        Action = [
           "dynamodb:GetItem"
         ]
         Resource = [
@@ -67,9 +87,14 @@ resource "aws_lambda_function" "overlay_generator" {
   source_code_hash = data.archive_file.overlay_generator.output_base64sha256
   environment {
     variables = {
-      image_src_url  = format("%s/%s",aws_apigatewayv2_stage.overlay.invoke_url, local.lowerthird_generator_url)
+      image_src_url    = format("%s/%s", aws_apigatewayv2_stage.overlay.invoke_url, local.lowerthird_generator_url)
+      lowerthird_table = aws_dynamodb_table.lowerthird.name
     }
   }
+  tracing_config {
+    mode = "Active"
+  }
+
 }
 
 resource "aws_lambda_permission" "overlay_generator" {

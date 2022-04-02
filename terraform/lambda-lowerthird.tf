@@ -35,6 +35,26 @@ resource "aws_iam_policy" "lowerthird_generator" {
       },
       {
         Action = [
+          "xray:GetSamplingStatisticSummaries",
+          "xray:PutTelemetryRecords",
+          "xray:GetTraceGraph",
+          "xray:GetServiceGraph",
+          "xray:GetInsightImpactGraph",
+          "xray:GetInsightSummaries",
+          "xray:GetSamplingTargets",
+          "xray:PutTraceSegments",
+          "xray:GetTimeSeriesServiceStatistics",
+          "xray:GetEncryptionConfig",
+          "xray:GetSamplingRules",
+          "xray:GetInsight",
+          "xray:GetInsightEvents",
+          "xray:GetTraceSummaries"
+        ]
+        Resource = "*"
+        Effect   = "Allow"
+      },
+      {
+        Action = [
           "s3:GetObject"
         ]
         Resource = [
@@ -64,7 +84,9 @@ resource "aws_lambda_function" "lowerthird_generator" {
       image_key    = var.image_key
     }
   }
-}
+  tracing_config {
+    mode = "Active"
+  }
 
 resource "aws_lambda_permission" "lowerthird_generator" {
   statement_id  = "apiGatewayallow"
