@@ -10,8 +10,10 @@ logging.info("starting")
 s3 = boto3.resource('s3')
 local_img = "/tmp/image.png"
 local_font = "/tmp/font.ttf"
+
+
 def addtext(img, cords, colour,title_text, text_size):
-    title_font = ImageFont.truetype('/src/Roboto-Black.ttf',text_size)
+    title_font = ImageFont.truetype(local_font,text_size)
     img.text(cords, title_text,colour, font=title_font)
 
 def lambda_handler(event,context):
