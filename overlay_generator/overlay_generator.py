@@ -20,15 +20,20 @@ def get_lowerthird(number, style, config):
     table = dynamodb.Table(TableName)
     
     responce = table.get_item(Key={'Index': number})
-    item = responce['Item']
-    user = "name=" +quote(item['FullName']) +"&role="+ quote(item['Role'])+"&social=" + quote(item['Social'])
+    text = responce['Item']['Text']
+    print(text)
+    print(text.keys())
+    textout = ""
+    for key in text.keys():
+        textout = textout + "&"+key.lower() + "=" + quote(text[key])
+    #user = "name=" +quote(text['FullName']) +"&role="+ quote(text['Role'])+"&social=" + quote(text['Social'])
     
     url = os.environ["image_src_url"]
     return """
     <div class=LowerThird style="{style}">
             <img src="{url}?{user}&{config}" alt="" width=100%>
         </div>
-    """.format(style=style,url=url,user=user, config=config )
+    """.format(style=style,url=url,user=textout, config=config )
     
 def get_overlay(overlay):
     #If the overlayobject is lowerthird then return a lowerthird object
