@@ -34,15 +34,21 @@ def buildImage(params):
     print(role)
     social = str(params["social"] if "social" in params else " ") 
     print(social)
+    name_size = int(params["name_size"] if "name_size" in params else 10) 
+    print(name_size)
+    role_size = int(params["role_size"] if "role_size" in params else 10) 
+    print(role_size)
+    social_size = int(params["social_size"] if "social_size" in params else 10) 
+    print(social_size)
     img = Image.open(local_img)
 
     logging.info(img)
 
     image_editable = ImageDraw.Draw(img)
 
-    addtext(image_editable, cords= (700,100),colour = (0,0,0),title_text=name,text_size=190)
-    addtext(image_editable, cords= (700,370),colour = (0,0,0),title_text=role,text_size=100)
-    addtext(image_editable, cords= (650,480),colour = (255,255,255),title_text=social,text_size=70)
+    addtext(image_editable, cords= (700,100),colour = (0,0,0),title_text=name,text_size=name_size)
+    addtext(image_editable, cords= (700,370),colour = (0,0,0),title_text=role,text_size=role_size)
+    addtext(image_editable, cords= (650,480),colour = (255,255,255),title_text=social,text_size=social_size)
     return img
     
     

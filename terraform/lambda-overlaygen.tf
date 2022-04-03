@@ -58,7 +58,8 @@ resource "aws_iam_policy" "overlay_generator" {
           "dynamodb:GetItem"
         ]
         Resource = [
-          "arn:aws:dynamodb:eu-west-2:732192916662:table/lowerthird",
+          aws_dynamodb_table.lowerthird.arn,
+          aws_dynamodb_table.overlay.arn
         ]
         Effect = "Allow"
       }
@@ -89,6 +90,7 @@ resource "aws_lambda_function" "overlay_generator" {
     variables = {
       image_src_url    = format("%s/%s", aws_apigatewayv2_stage.overlay.invoke_url, local.lowerthird_generator_url)
       lowerthird_table = aws_dynamodb_table.lowerthird.name
+      overlay_table = aws_dynamodb_table.overlay.name
     }
   }
   tracing_config {
