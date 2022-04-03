@@ -4,7 +4,6 @@ import os
 client = boto3.client('dynamodb')
 dynamodb = boto3.resource('dynamodb')
 
-
 def get_lowerthird_config(table):
     #loop though all the configs
     config = table["config"]
@@ -27,6 +26,7 @@ def get_lowerthird(number, style, config):
     for key in text.keys():
         textout = textout + "&"+key.lower() + "=" + quote(text[key])
     #user = "name=" +quote(text['FullName']) +"&role="+ quote(text['Role'])+"&social=" + quote(text['Social'])
+
     
     url = os.environ["image_src_url"]
     return """

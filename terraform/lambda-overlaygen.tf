@@ -91,6 +91,7 @@ resource "aws_lambda_function" "overlay_generator" {
       image_src_url    = format("%s/%s", aws_apigatewayv2_stage.overlay.invoke_url, local.lowerthird_generator_url)
       lowerthird_table = aws_dynamodb_table.lowerthird.name
       overlay_table    = aws_dynamodb_table.overlay.name
+
     }
   }
   tracing_config {

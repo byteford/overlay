@@ -40,6 +40,7 @@ def buildImage(params):
     print(role_size)
     social_size = int(params["social_size"] if "social_size" in params else 10) 
     print(social_size)
+
     name_loc_x = int(params["name_loc_x"] if "name_loc_x" in params else 10) 
     print(name_loc_x)
     name_loc_y = int(params["name_loc_y"] if "name_loc_y" in params else 10) 
@@ -52,15 +53,21 @@ def buildImage(params):
     print(social_loc_x)
     social_loc_y = int(params["social_loc_y"] if "social_loc_y" in params else 10) 
     print(social_loc_y)
+
     img = Image.open(local_img)
 
     logging.info(img)
 
     image_editable = ImageDraw.Draw(img)
 
+
     addtext(image_editable, cords= (name_loc_x,name_loc_y),colour = (0,0,0),title_text=name,text_size=name_size)
     addtext(image_editable, cords= (role_loc_x,role_loc_y),colour = (0,0,0),title_text=role,text_size=role_size)
     addtext(image_editable, cords= (social_loc_x,social_loc_y),colour = (255,255,255),title_text=social,text_size=social_size)
+    addtext(image_editable, cords= (700,100),colour = (0,0,0),title_text=name,text_size=name_size)
+    addtext(image_editable, cords= (700,370),colour = (0,0,0),title_text=role,text_size=role_size)
+    addtext(image_editable, cords= (650,480),colour = (255,255,255),title_text=social,text_size=social_size)
+
     return img
     
     
