@@ -2,27 +2,26 @@ import boto3
 from urllib.parse import quote
 import os
 client = boto3.client('dynamodb')
+dynamodb = boto3.resource('dynamodb')
 
-def get_res_item(res, item):
-    print(res['Item'][item])
-    return quote(res['Item'][item]['S'])
 
 def get_lowerthird_config(table):
-    print("config")
-    text = table["M"]["text"]["M"]
+    #loop though all the configs
+    config = table["config"]
     output = ""
-    for key in text.keys():
-        print(text[key])
-        outputItem = "{key}_size={size}&{key}_loc_x={x}&{key}_loc_y={y}".format(key=key.lower(), size=text[key]['M']["Font_size"]["S"], x=text[key]['M']["X"]["S"],y=text[key]['M']["Y"]["S"])
+    for key in config.keys():
+        print(config[key])
+        outputItem = "{key}_size={size}&{key}_loc_x={x}&{key}_loc_y={y}".format(key=key.lower(), size=config[key]["Font_size"], x=config[key]["X"],y=config[key]["Y"])
         output = output + "&" + outputItem
-    print(output)
     return output
     
 def get_lowerthird(number, style, config):
     TableName = os.environ["lowerthird_table"]
-    res = client.get_item(TableName=TableName, Key={"Index": {'S': number}})
-
-    user = "name=" +get_res_item(res,'FullName') +"&role="+ get_res_item(res,"Role")+"&social=" + get_res_item(res,'Social')
+    table = dynamodb.Table(TableName)
+    
+    responce = table.get_item(Key={'Index': number})
+    item = responce['Item']
+    user = "name=" +quote(item['FullName']) +"&role="+ quote(item['Role'])+"&social=" + quote(item['Social'])
     
     url = os.environ["image_src_url"]
     return """
@@ -32,41 +31,42 @@ def get_lowerthird(number, style, config):
     """.format(style=style,url=url,user=user, config=config )
     
 def get_overlay(overlay):
-    print(overlay['M'])
-    if "Lowerthird" in overlay['M']:
-        return get_lowerthird(overlay['M']['Lowerthird']['S'],overlay['M']['Style']['S'],get_lowerthird_config(overlay))
+    #If the overlayobject is lowerthird then return a lowerthird object
+    if "Lowerthird" in overlay:
+        return get_lowerthird(overlay['Lowerthird'],overlay['Style'],get_lowerthird_config(overlay))
     return ""
 
 def get_body(overlay):
+    #Get table name from envvars
     TableName = os.environ["overlay_table"]
-    res = client.get_item(TableName=TableName, Key={"Index": {'S': overlay}})
-    print(res)
-    print(res['Item']['Overlay']['M'].keys())
     
+    table = dynamodb.Table(TableName)
+    
+    responce = table.get_item(Key={'Index': overlay})
+    print(responce)
+    #Loop though all the overlay object in the table and build an html object to return
     overlaybuit = ""
+    for key in responce['Item']['Overlay'].keys():
     
-    for key in res['Item']['Overlay']['M'].keys():
-    
-        overlaybuit = overlaybuit + get_overlay(res['Item']['Overlay']['M'][key])
+        overlaybuit = overlaybuit + get_overlay(responce['Item']['Overlay'][key])
     
     return """
-    <div class=Overlay>
-        {overlay}
-    </div>
+        <div class=Overlay>
+            {overlay}
+        </div>
             """.format(overlay=overlaybuit)
 
 def lambda_handler(event, context):
+    #if no url params return
     if "queryStringParameters" not in event:
-        print("please pass in an overlaynumber")
         return {
-        "isBase64Encoded": False,
-        "statusCode": 200,
+        "statusCode": 500,
         "body": "please pass in an overlaynumber"
     }
-    
+    #Get the overlay number for the params
     overlay = event["queryStringParameters"]["overlay"]
     
-
+    #Get the body and add it in to the html to return
     return {
         'statusCode': 200,
         "headers": {

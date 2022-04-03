@@ -59,7 +59,7 @@ resource "aws_dynamodb_table_item" "overlay1" {
             Style = {
               S = "top:70%; left:0%; right:70%; position:absolute"
             }
-            text = local.lowerthird_config
+            config = local.lowerthird_config
           }
         }
         lowerthirdRight = {
@@ -70,7 +70,7 @@ resource "aws_dynamodb_table_item" "overlay1" {
             Style = {
               S = "top:70%; left:50%; right:20%; position:absolute"
             }
-            text = local.lowerthird_config
+            config = local.lowerthird_config
           }
         }
       }
