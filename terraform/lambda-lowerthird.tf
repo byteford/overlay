@@ -58,8 +58,7 @@ resource "aws_iam_policy" "lowerthird_generator" {
           "s3:GetObject"
         ]
         Resource = [
-          "arn:aws:s3:::${var.image_bucket}/${var.image_key}",
-          "arn:aws:s3:::${var.font_bucket}/${var.font_key}"
+          "arn:aws:s3:::${var.image_bucket}/*"
         ]
         Effect = "Allow"
       }
