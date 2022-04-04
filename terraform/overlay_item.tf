@@ -57,7 +57,20 @@ resource "aws_dynamodb_table_item" "overlay1" {
               S = "0"
             }
             Style = {
-              S = "top:70%; left:0%; right:70%; position:absolute"
+              M = {
+                right = {
+                  S = "70%"
+                }
+                position = {
+                  S = "absolute"
+                },
+                top = {
+                  S = "70%"
+                },
+                left = {
+                  S = "0%"
+                }
+              }
             }
             config = local.lowerthird_config
           }
@@ -68,7 +81,20 @@ resource "aws_dynamodb_table_item" "overlay1" {
               S = "1"
             }
             Style = {
-              S = "top:70%; left:50%; right:20%; position:absolute"
+              M = {
+                right = {
+                  S = "20%"
+                }
+                position = {
+                  S = "absolute"
+                },
+                top = {
+                  S = "70%"
+                },
+                left = {
+                  S = "50%"
+                }
+              }
             }
             config = local.lowerthird_config
           }
