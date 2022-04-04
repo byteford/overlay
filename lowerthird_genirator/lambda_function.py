@@ -16,9 +16,8 @@ def addtext(img, cords, colour,title_text, text_size):
     title_font = ImageFont.truetype(local_font,text_size)
     img.text(cords, title_text,colour, font=title_font)
 
-def download_from_s3():
+def download_from_s3(image_key):
     image_bucket = os.environ.get("image_bucket")
-    image_key = os.environ.get("image_key")
     print(image_bucket,image_key)
     s3.Bucket(image_bucket).download_file(image_key, local_img)
 
@@ -73,7 +72,8 @@ def buildImage(params):
     
 
 def lambda_handler(event,context):
-    download_from_s3()
+    
+    
     print(event)
     if "queryStringParameters" not in event:
         print("please pass in 'name', 'role' and 'social'")
@@ -82,7 +82,8 @@ def lambda_handler(event,context):
         "statusCode": 200,
         "body": "please pass in 'name', 'role' and 'social'"
     }
-
+    image_key = event["queryStringParameters"]["image_key"] if "image_key" in event["queryStringParameters"] else os.environ.get("image_key")
+    download_from_s3(image_key)
     img = buildImage(event["queryStringParameters"])
 
     bufferd = BytesIO()

@@ -58,7 +58,7 @@ resource "aws_iam_policy" "lowerthird_generator" {
           "s3:GetObject"
         ]
         Resource = [
-          "arn:aws:s3:::${var.image_bucket}/*"
+          "arn:aws:s3:::${var.bucket_location}/*"
         ]
         Effect = "Allow"
       }
@@ -77,9 +77,9 @@ resource "aws_lambda_function" "lowerthird_generator" {
   timeout       = 10
   environment {
     variables = {
-      font_bucket  = var.font_bucket
+      font_bucket  = var.bucket_location
       font_key     = var.font_key
-      image_bucket = var.image_bucket
+      image_bucket = var.bucket_location
       image_key    = var.image_key
     }
   }

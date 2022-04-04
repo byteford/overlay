@@ -44,3 +44,33 @@ resource "aws_apigatewayv2_integration" "overlay" {
   payload_format_version = "2.0"
   integration_uri        = aws_lambda_function.overlay_generator.invoke_arn
 }
+
+resource "aws_apigatewayv2_route" "get_lowerthird" {
+  api_id    = aws_apigatewayv2_api.this.id
+  route_key = "ANY /${local.get_lowerthird_url}"
+
+  target = "integrations/${aws_apigatewayv2_integration.overlay.id}"
+}
+
+resource "aws_apigatewayv2_integration" "get_lowerthird" {
+  api_id                 = aws_apigatewayv2_api.this.id
+  integration_type       = "AWS_PROXY"
+  connection_type        = "INTERNET"
+  payload_format_version = "2.0"
+  integration_uri        = aws_lambda_function.get_lower_third.invoke_arn
+}
+
+resource "aws_apigatewayv2_route" "get_overlay" {
+  api_id    = aws_apigatewayv2_api.this.id
+  route_key = "ANY /${local.get_overlay_url}"
+
+  target = "integrations/${aws_apigatewayv2_integration.overlay.id}"
+}
+
+resource "aws_apigatewayv2_integration" "get_overlay" {
+  api_id                 = aws_apigatewayv2_api.this.id
+  integration_type       = "AWS_PROXY"
+  connection_type        = "INTERNET"
+  payload_format_version = "2.0"
+  integration_uri        = aws_lambda_function.get_overlay.invoke_arn
+}
