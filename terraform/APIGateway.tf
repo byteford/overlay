@@ -57,7 +57,7 @@ resource "aws_apigatewayv2_integration" "get_lowerthird" {
   integration_type       = "AWS_PROXY"
   connection_type        = "INTERNET"
   payload_format_version = "2.0"
-  integration_uri        = aws_lambda_function.get_lower_third.invoke_arn
+  integration_uri        = aws_lambda_function.get_lowerthird.invoke_arn
 }
 
 resource "aws_apigatewayv2_route" "get_overlay" {
