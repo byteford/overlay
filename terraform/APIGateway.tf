@@ -53,7 +53,7 @@ resource "aws_apigatewayv2_route" "get_lowerthird" {
   api_id    = aws_apigatewayv2_api.this.id
   route_key = "ANY /${local.get_lowerthird_url}"
 
-  target = "integrations/${aws_apigatewayv2_integration.overlay.id}"
+  target = "integrations/${aws_apigatewayv2_integration.get_lowerthird.id}"
 }
 
 resource "aws_apigatewayv2_integration" "get_lowerthird" {
