@@ -63,9 +63,6 @@ def buildImage(params):
     addtext(image_editable, cords= (name_loc_x,name_loc_y),colour = (0,0,0),title_text=name,text_size=name_size)
     addtext(image_editable, cords= (role_loc_x,role_loc_y),colour = (0,0,0),title_text=role,text_size=role_size)
     addtext(image_editable, cords= (social_loc_x,social_loc_y),colour = (255,255,255),title_text=social,text_size=social_size)
-    addtext(image_editable, cords= (700,100),colour = (0,0,0),title_text=name,text_size=name_size)
-    addtext(image_editable, cords= (700,370),colour = (0,0,0),title_text=role,text_size=role_size)
-    addtext(image_editable, cords= (650,480),colour = (255,255,255),title_text=social,text_size=social_size)
 
     return img
     
