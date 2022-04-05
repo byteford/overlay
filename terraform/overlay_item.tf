@@ -75,30 +75,6 @@ resource "aws_dynamodb_table_item" "overlay1" {
             config = local.lowerthird_config
           }
         }
-        lowerthirdRight = {
-          M = {
-            Lowerthird = {
-              S = "1"
-            }
-            Style = {
-              M = {
-                right = {
-                  S = "20%"
-                }
-                position = {
-                  S = "absolute"
-                },
-                top = {
-                  S = "70%"
-                },
-                left = {
-                  S = "50%"
-                }
-              }
-            }
-            config = local.lowerthird_config
-          }
-        }
       }
     }
   })
