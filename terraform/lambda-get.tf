@@ -78,13 +78,13 @@ data "archive_file" "get_lowerthird" {
 }
 
 resource "aws_lambda_function" "get_lowerthird" {
-  filename         = data.archive_file.overlay_generator.output_path
+  filename         = data.archive_file.get_lowerthird.output_path
   function_name    = "get_lowerthird"
-  role             = aws_iam_role.overlay_generator.arn
+  role             = aws_iam_role.get_lowerthird.arn
   timeout          = 10
   handler          = "get_lowerthird.lambda_handler"
   runtime          = "python3.8"
-  source_code_hash = data.archive_file.overlay_generator.output_base64sha256
+  source_code_hash = data.archive_file.get_lowerthird.output_base64sha256
   environment {
     variables = {
       lowerthird_table = aws_dynamodb_table.lowerthird.name
@@ -189,13 +189,13 @@ data "archive_file" "get_overlay" {
 }
 
 resource "aws_lambda_function" "get_overlay" {
-  filename         = data.archive_file.overlay_generator.output_path
+  filename         = data.archive_file.get_overlay.output_path
   function_name    = "get_overlay"
-  role             = aws_iam_role.overlay_generator.arn
+  role             = aws_iam_role.get_overlay.arn
   timeout          = 10
   handler          = "get_overlay.lambda_handler"
   runtime          = "python3.8"
-  source_code_hash = data.archive_file.overlay_generator.output_base64sha256
+  source_code_hash = data.archive_file.get_overlay.output_base64sha256
   environment {
     variables = {
       overlay_table    = aws_dynamodb_table.overlay.name
