@@ -12,12 +12,10 @@ export default class Overlay extends React.Component{
     }
     getOverlay(){
         const url = 'https://ujr0uayvh8.execute-api.eu-west-2.amazonaws.com/overlay/get_overlay?overlay='+ this.state.numer
-        console.log(url)
         fetch(url)
-        .then(res => res)
+        .then(res => res.json())
         .then(
             (result) => {
-                console.log(result)
                 const lowerthirds = []
                 for (const key in result){
                     if (result[key].Lowerthird){
