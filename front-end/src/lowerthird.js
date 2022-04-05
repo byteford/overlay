@@ -12,7 +12,7 @@ export default class Lowerthird extends React.Component{
         
     }
     getLowerThird(){
-        const url = 'https://b6pgciri1i.execute-api.eu-west-2.amazonaws.com/default/get_lowerthird?Index='+ this.props.index
+        const url = 'https://ujr0uayvh8.execute-api.eu-west-2.amazonaws.com/overlay/get_lowerthird?Index='+ this.props.index
         fetch(url)
         .then(res => res.json())
         .then(
