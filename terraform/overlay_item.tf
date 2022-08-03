@@ -79,3 +79,40 @@ resource "aws_dynamodb_table_item" "overlay1" {
     }
   })
 }
+
+resource "aws_dynamodb_table_item" "overlay2" {
+  table_name = aws_dynamodb_table.overlay.name
+  hash_key   = aws_dynamodb_table.overlay.hash_key
+
+  item = jsonencode({
+    Index = { S = "1" },
+    Overlay = {
+      M = {
+        lowerthirdLeft = {
+          M = {
+            Lowerthird = {
+              S = "1"
+            }
+            Style = {
+              M = {
+                right = {
+                  S = "70%"
+                }
+                position = {
+                  S = "absolute"
+                },
+                top = {
+                  S = "70%"
+                },
+                left = {
+                  S = "0%"
+                }
+              }
+            }
+            config = local.lowerthird_config
+          }
+        }
+      }
+    }
+  })
+}
