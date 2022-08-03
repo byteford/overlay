@@ -1,5 +1,5 @@
 resource "aws_iam_role" "ws_connect" {
-  name = "put_current_overlay"
+  name = "ws_connect"
 
   assume_role_policy = <<EOF
 {
