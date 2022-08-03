@@ -20,5 +20,5 @@ def lambda_handler(event, context):
         "headers": {
           'Content-Type': 'text/json',
         },
-        'body': json.dumps(responce['Item']['Overlay'])
+        'body': json.dumps(responce['Item']['Value'])
     }
