@@ -81,7 +81,7 @@ resource "aws_apigatewayv2_integration" "get_overlay" {
 
 resource "aws_apigatewayv2_route" "get_current_overlay" {
   api_id    = aws_apigatewayv2_api.this.id
-  route_key = "ANY /${local.get_current_overlay_url}"
+  route_key = "GET /${local.get_current_overlay_url}"
 
   target = "integrations/${aws_apigatewayv2_integration.get_current_overlay.id}"
 }
@@ -92,4 +92,19 @@ resource "aws_apigatewayv2_integration" "get_current_overlay" {
   connection_type        = "INTERNET"
   payload_format_version = "2.0"
   integration_uri        = aws_lambda_function.get_current_overlay.invoke_arn
+}
+
+resource "aws_apigatewayv2_route" "put_current_overlay" {
+  api_id    = aws_apigatewayv2_api.this.id
+  route_key = "PUT /${local.get_current_overlay_url}"
+
+  target = "integrations/${aws_apigatewayv2_integration.put_current_overlay.id}"
+}
+
+resource "aws_apigatewayv2_integration" "put_current_overlay" {
+  api_id                 = aws_apigatewayv2_api.this.id
+  integration_type       = "AWS_PROXY"
+  connection_type        = "INTERNET"
+  payload_format_version = "2.0"
+  integration_uri        = aws_lambda_function.put_current_overlay.invoke_arn
 }
