@@ -1,3 +1,3 @@
-resource "aws_s3_bucket" "this"{
-    bucket = var.bucket_location
+resource "aws_s3_bucket" "this" {
+  bucket = var.bucket_location
 }

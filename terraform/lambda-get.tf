@@ -198,7 +198,7 @@ resource "aws_lambda_function" "get_overlay" {
   source_code_hash = data.archive_file.get_overlay.output_base64sha256
   environment {
     variables = {
-      overlay_table    = aws_dynamodb_table.overlay.name
+      overlay_table = aws_dynamodb_table.overlay.name
 
     }
   }
