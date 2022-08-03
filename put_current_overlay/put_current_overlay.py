@@ -14,12 +14,8 @@ def lambda_handler(event, context):
     table = dynamodb.Table(TableName)
     
     responce = table.put_item(Item={'Index': overlay, 'Value': overlay})
-    
+    print(responce)
     
     return {
-        'statusCode': 200,
-        "headers": {
-          'Content-Type': 'text/json',
-        },
-        'body': json.dumps(responce['Item']['Overlay'])
+        'statusCode': 200
     }
