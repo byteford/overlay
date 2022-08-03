@@ -13,7 +13,7 @@ def lambda_handler(event, context):
     
     table = dynamodb.Table(TableName)
     
-    responce = table.put_item(Item={'Index': overlay, 'Value': overlay})
+    responce = table.put_item(Item={'Index': 0, 'Value': overlay})
     print(responce)
     
     return {
