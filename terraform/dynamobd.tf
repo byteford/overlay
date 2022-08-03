@@ -21,3 +21,15 @@ resource "aws_dynamodb_table" "overlay" {
   }
 
 }
+
+resource "aws_dynamodb_table" "current_overlay" {
+  name         = "current_overlay"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "Index"
+
+  attribute {
+    name = "Index"
+    type = "S"
+  }
+
+}
