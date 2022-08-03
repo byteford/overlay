@@ -19,7 +19,7 @@ resource "aws_apigatewayv2_stage" "ws" {
 resource "aws_apigatewayv2_route" "connect" {
   api_id    = aws_apigatewayv2_api.ws.id
   route_key = "$connect"
-  target = "intergrations/${aws_apigatewayv2_integration.connect.id}"
+  target = "integrations/${aws_apigatewayv2_integration.connect.id}"
 }
 
 resource "aws_apigatewayv2_integration" "connect" {
