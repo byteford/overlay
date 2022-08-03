@@ -10,19 +10,16 @@ variable "font_key" {
 
 variable "presenters" {
   type = list(object({
-    index  = string
     name   = string
     role   = string
     social = string
   }))
   default = [{
-    index  = "0"
     name   = "James Sandford"
     role   = "Delivery Consultant"
     social = "in/Byteford"
     },
     {
-      index  = "1"
       name   = "Grace Tree"
       role   = "Delivery Consultant"
       social = "in/TreeOfGrace"
