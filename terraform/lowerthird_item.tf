@@ -21,7 +21,7 @@ resource "aws_dynamodb_table_item" "lowerthird" {
 
   item = jsonencode({
     Index = {
-      S = each.value.index
+      S = tostring(index(local.users,each.value))
     }
     Text = {
       M = {
