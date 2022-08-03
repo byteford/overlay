@@ -23,6 +23,9 @@ resource "aws_apigatewayv2_route" "connect" {
 }
 
 resource "aws_apigatewayv2_integration" "connect" {
-  api_id           = aws_apigatewayv2_api.ws.id
-  integration_type = "MOCK"
+  api_id                 = aws_apigatewayv2_api.ws.id
+  integration_type       = "AWS_PROXY"
+  connection_type        = "INTERNET"
+  payload_format_version = "2.0"
+  integration_uri        = aws_lambda_function.ws_connect.invoke_arn
 }
