@@ -16,16 +16,16 @@ export default class Overlay extends React.Component{
         .then(res => res.json())
         .then(
             (result) => {
-                this.setState({numer: result});
+                this.getOverlay(result)
             },
             (error) =>{ 
                 console.log(error)
             }
         )
-        this.getOverlay()
+        
     }
-    getOverlay(){
-        const url = 'https://ujr0uayvh8.execute-api.eu-west-2.amazonaws.com/overlay/get_overlay?overlay='+ this.state.numer
+    getOverlay(number){
+        const url = 'https://ujr0uayvh8.execute-api.eu-west-2.amazonaws.com/overlay/get_overlay?overlay='+ number
         fetch(url)
         .then(res => res.json())
         .then(
@@ -36,7 +36,7 @@ export default class Overlay extends React.Component{
                         lowerthirds.push(result[key])
                     }
                 }
-                this.setState({lowerthirds: lowerthirds});
+                this.setState({numer: result,lowerthirds: lowerthirds});
             },
             (error) =>{ 
                 console.log(error)

@@ -9,6 +9,14 @@ function App() {
           <Control></Control>
         </div>
       );
+    case "/mask":
+      return (
+        <div style={{backgroundColor: "black"}}>
+          <div className="App" style={{filter:"contrast(0) saturate(0) brightness(0) invert(1)", display: "initial"}}>
+            <Overlay></Overlay>
+          </div>
+        </div>
+      );
     default:
       return (
         <div className="App">
