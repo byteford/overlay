@@ -1,4 +1,36 @@
 locals {
+  lowerthirdLeft_style = {
+    M = {
+      right = {
+        S = "70%"
+      }
+      position = {
+        S = "absolute"
+      },
+      top = {
+        S = "70%"
+      },
+      left = {
+        S = "0%"
+      }
+    }
+  }
+  lowerthirdRight_style = {
+    M = {
+      right = {
+        S = "0%"
+      }
+      position = {
+        S = "absolute"
+      },
+      top = {
+        S = "70%"
+      },
+      left = {
+        S = "70%"
+      }
+    }
+  }
   lowerthird_config = {
     M = {
       Name = {
@@ -56,22 +88,7 @@ resource "aws_dynamodb_table_item" "overlay1" {
             Lowerthird = {
               S = "0"
             }
-            Style = {
-              M = {
-                right = {
-                  S = "70%"
-                }
-                position = {
-                  S = "absolute"
-                },
-                top = {
-                  S = "70%"
-                },
-                left = {
-                  S = "0%"
-                }
-              }
-            }
+            Style  = lowerthirdLeft_style
             config = local.lowerthird_config
           }
         }
@@ -93,22 +110,16 @@ resource "aws_dynamodb_table_item" "overlay2" {
             Lowerthird = {
               S = "1"
             }
-            Style = {
-              M = {
-                right = {
-                  S = "70%"
-                }
-                position = {
-                  S = "absolute"
-                },
-                top = {
-                  S = "70%"
-                },
-                left = {
-                  S = "0%"
-                }
-              }
+            Style  = lowerthirdLeft_style
+            config = local.lowerthird_config
+          }
+        }
+        lowerthirdright = {
+          M = {
+            Lowerthird = {
+              S = "1"
             }
+            Style  = lowerthirdRight_style
             config = local.lowerthird_config
           }
         }

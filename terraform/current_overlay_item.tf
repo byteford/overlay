@@ -4,6 +4,6 @@ resource "aws_dynamodb_table_item" "current_overlay" {
 
   item = jsonencode({
     Index = { S = "0" },
-    Value = { S = "0"},
+    Value = { S = "0" },
   })
 }

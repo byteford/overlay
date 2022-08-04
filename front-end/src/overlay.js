@@ -37,6 +37,7 @@ export default class Overlay extends React.Component{
                     }
                 }
                 this.setState({numer: result,lowerthirds: lowerthirds});
+                this.timer = setTimeout(() => this.getCurrentOverlay(), 1);
             },
             (error) =>{ 
                 console.log(error)
@@ -45,10 +46,9 @@ export default class Overlay extends React.Component{
     }
     componentDidMount(){
         this.getCurrentOverlay()
-        this.interval = setInterval(() => this.getCurrentOverlay(), 100)        
     }
     componentWillUnmount(){
-        clearInterval(this.interval)
+        clearTimeout(this.timer)
     }
     render(){
         if(!this.state.lowerthirds){
@@ -61,6 +61,11 @@ export default class Overlay extends React.Component{
                     <Lowerthird index={lower.Lowerthird} Style={lower.Style} config={lower.config}/>
                 </div>
                 )}
+                <img src='https://digital-meetup-signed-users.s3-eu-west-1.amazonaws.com/Screenshot+2020-04-28+at+10.50.14.png'
+                alt='' style={{width: "10%",
+                    right: 0,
+                    bottom: 0,
+                    position: "absolute"}}></img>
             </div>
         )
     }
