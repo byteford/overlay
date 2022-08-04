@@ -24,6 +24,6 @@ resource "aws_apigatewayv2_route" "connect" {
 
 resource "aws_apigatewayv2_integration" "connect" {
   api_id                 = aws_apigatewayv2_api.ws.id
-  integration_type       = "AWS"
+  integration_type       = "AWS_PROXY"
   integration_uri        = aws_lambda_function.ws_connect.invoke_arn
 }

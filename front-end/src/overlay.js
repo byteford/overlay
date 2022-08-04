@@ -10,6 +10,20 @@ export default class Overlay extends React.Component{
         }
         
     }
+    getCurrentOverlay(){
+        const url = 'https://ujr0uayvh8.execute-api.eu-west-2.amazonaws.com/overlay/current_overlay'
+        fetch(url)
+        .then(res => res.json())
+        .then(
+            (result) => {
+                this.setState({numer: result});
+            },
+            (error) =>{ 
+                console.log(error)
+            }
+        )
+        this.getOverlay()
+    }
     getOverlay(){
         const url = 'https://ujr0uayvh8.execute-api.eu-west-2.amazonaws.com/overlay/get_overlay?overlay='+ this.state.numer
         fetch(url)
@@ -30,8 +44,8 @@ export default class Overlay extends React.Component{
         )
     }
     componentDidMount(){
-        this.interval = setInterval(() => this.getOverlay(), 1000)
-        
+        this.getCurrentOverlay()
+        this.interval = setInterval(() => this.getCurrentOverlay(), 100)        
     }
     componentWillUnmount(){
         clearInterval(this.interval)
