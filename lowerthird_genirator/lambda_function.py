@@ -16,17 +16,15 @@ def addtext(img, cords, colour,title_text, text_size):
     title_font = ImageFont.truetype(local_font,text_size)
     img.text(cords, title_text,colour, font=title_font)
 
-def download_from_s3(image_key):
-    image_bucket = os.environ.get("image_bucket")
-    print(image_bucket,image_key)
-    s3.Bucket(image_bucket).download_file(image_key, local_img)
-
-    font_bucket = os.environ.get("font_bucket")
-    font_key = os.environ.get("font_key")
-    print(font_bucket,font_key)
-    s3.Bucket(font_bucket).download_file(font_key, local_font)
+def download_from_s3(bucket, key,local):
+    print(bucket,key,local)
+    s3.Bucket(bucket).download_file(key, local)
 
 def buildImage(params):
+    width = int(params["width"] if "width" in params else "100") 
+    print(width)
+    height = int(params["height"] if "height" in params else "100") 
+    print(height)
     name = str(params["name"] if "name" in params else " ") 
     print(name)
     role = str(params["role"] if "role" in params else " ") 
@@ -52,9 +50,10 @@ def buildImage(params):
     print(social_loc_x)
     social_loc_y = int(params["social_loc_y"] if "social_loc_y" in params else 10) 
     print(social_loc_y)
-
-    img = Image.open(local_img)
-
+    try:
+        img = Image.open(local_img)
+    except FileNotFoundError:
+        img = Image.new(mode="RGB", size=(width,height), color = (255,255,255))
     logging.info(img)
 
     image_editable = ImageDraw.Draw(img)
@@ -79,8 +78,10 @@ def lambda_handler(event,context):
         "statusCode": 200,
         "body": "please pass in 'name', 'role' and 'social'"
     }
-    image_key = event["queryStringParameters"]["image_key"] if "image_key" in event["queryStringParameters"] else os.environ.get("image_key")
-    download_from_s3(image_key)
+    if "image_key" in event["queryStringParameters"]:
+        image_key = event["queryStringParameters"]["image_key"] if "image_key" in event["queryStringParameters"] else os.environ.get("image_key")
+        download_from_s3(os.environ.get("image_bucket"),image_key,local_img)
+    download_from_s3(os.environ.get("font_bucket"),os.environ.get("font_key"),local_font)
     img = buildImage(event["queryStringParameters"])
 
     bufferd = BytesIO()

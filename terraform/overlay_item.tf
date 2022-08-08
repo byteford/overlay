@@ -33,6 +33,13 @@ locals {
   }
   lowerthird_config = {
     M = {
+      Image = {
+        M = {
+          Key = {
+            s  = "dpg lower third300.png"
+          }
+        }
+      }
       Name = {
         M = {
           X = {
