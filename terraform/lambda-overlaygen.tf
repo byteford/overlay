@@ -84,7 +84,7 @@ resource "aws_lambda_function" "overlay_generator" {
   role             = aws_iam_role.overlay_generator.arn
   timeout          = 10
   handler          = "overlay_generator.lambda_handler"
-  runtime          = "python3.8"
+  runtime          = "python3.9"
   source_code_hash = data.archive_file.overlay_generator.output_base64sha256
   layers = [data.aws_lambda_layer_version.xray.arn]
 
