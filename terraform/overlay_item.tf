@@ -36,7 +36,7 @@ locals {
       Image = {
         M = {
           Key = {
-            s  = "dpg lower third300.png"
+            s = "dpg lower third300.png"
           }
         }
       }

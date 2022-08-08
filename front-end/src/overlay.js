@@ -61,11 +61,7 @@ export default class Overlay extends React.Component{
                     <Lowerthird index={lower.Lowerthird} Style={lower.Style} config={lower.config}/>
                 </div>
                 )}
-                <img src='https://digital-meetup-signed-users.s3-eu-west-1.amazonaws.com/Screenshot+2020-04-28+at+10.50.14.png'
-                alt='' style={{width: "10%",
-                    right: 0,
-                    bottom: 0,
-                    position: "absolute"}}></img>
+                
             </div>
         )
     }

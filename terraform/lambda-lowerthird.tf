@@ -83,6 +83,11 @@ resource "aws_lambda_function" "lowerthird_generator" {
       image_key    = var.image_key
     }
   }
+  lifecycle {
+    ignore_changes = [
+      "image_uri"
+    ]
+  }
   tracing_config {
     mode = "Active"
   }
