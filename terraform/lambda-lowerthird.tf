@@ -69,12 +69,21 @@ resource "aws_iam_role_policy_attachment" "lowerthird_generator" {
   role       = aws_iam_role.lowerthird_generator.name
   policy_arn = aws_iam_policy.lowerthird_generator.arn
 }
+
+data "archive_file" "lowerthird_generator" {
+  type        = "zip"
+  source_file = "../lowerthird_generator/lambda_function.py"
+  output_path = "../lowerthird_generator/lambda_function.zip"
+}
 resource "aws_lambda_function" "lowerthird_generator" {
-  image_uri     = "${aws_ecr_repository.lowerthird.repository_url}:latest"
+  filename         = data.archive_file.lowerthird_generator.output_path
   function_name = "lowerthird_generator"
   role          = aws_iam_role.lowerthird_generator.arn
-  package_type  = "Image"
   timeout       = 10
+  handler          = "lambda_function.lambda_handler"
+  runtime          = "python3.8"
+  source_code_hash = data.archive_file.lowerthird_generator.output_base64sha256
+
   environment {
     variables = {
       font_bucket  = var.bucket_location
@@ -82,11 +91,6 @@ resource "aws_lambda_function" "lowerthird_generator" {
       image_bucket = var.bucket_location
       image_key    = var.image_key
     }
-  }
-  lifecycle {
-    ignore_changes = [
-      "image_uri"
-    ]
   }
   tracing_config {
     mode = "Active"
