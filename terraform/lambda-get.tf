@@ -83,8 +83,9 @@ resource "aws_lambda_function" "get_lowerthird" {
   role             = aws_iam_role.get_lowerthird.arn
   timeout          = 10
   handler          = "get_lowerthird.lambda_handler"
-  runtime          = "python3.8"
+  runtime          = "python3.9"
   source_code_hash = data.archive_file.get_lowerthird.output_base64sha256
+  layers = [aws_lambda_layer_version.xray.arn]
   environment {
     variables = {
       lowerthird_table = aws_dynamodb_table.lowerthird.name
@@ -194,8 +195,10 @@ resource "aws_lambda_function" "get_overlay" {
   role             = aws_iam_role.get_overlay.arn
   timeout          = 10
   handler          = "get_overlay.lambda_handler"
-  runtime          = "python3.8"
+  runtime          = "python3.9"
   source_code_hash = data.archive_file.get_overlay.output_base64sha256
+  layers = [aws_lambda_layer_version.xray.arn]
+
   environment {
     variables = {
       overlay_table = aws_dynamodb_table.overlay.name
@@ -305,8 +308,10 @@ resource "aws_lambda_function" "get_current_overlay" {
   role             = aws_iam_role.get_current_overlay.arn
   timeout          = 10
   handler          = "get_current_overlay.lambda_handler"
-  runtime          = "python3.8"
+  runtime          = "python3.9"
   source_code_hash = data.archive_file.get_current_overlay.output_base64sha256
+  layers = [aws_lambda_layer_version.xray.arn]
+
   environment {
     variables = {
       overlay_table = aws_dynamodb_table.current_overlay.name
