@@ -86,7 +86,7 @@ resource "aws_lambda_function" "overlay_generator" {
   handler          = "overlay_generator.lambda_handler"
   runtime          = "python3.8"
   source_code_hash = data.archive_file.overlay_generator.output_base64sha256
-  layers = [aws_lambda_layer_version.xray.arn]
+  layers = [data.aws_lambda_layer_version.xray.arn]
 
   environment {
     variables = {
