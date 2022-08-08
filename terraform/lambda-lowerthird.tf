@@ -83,7 +83,7 @@ resource "aws_lambda_function" "lowerthird_generator" {
   handler          = "lambda_function.lambda_handler"
   runtime          = "python3.9"
   source_code_hash = data.archive_file.lowerthird_generator.output_base64sha256
-
+  layers = [data.aws_lambda_layer_version.xray.arn,data.aws_lambda_layer_version.pillow.arn]
   environment {
     variables = {
       font_bucket  = var.bucket_location
