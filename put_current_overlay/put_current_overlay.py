@@ -1,7 +1,13 @@
 import json
 import boto3
 import os
+from aws_xray_sdk.core import xray_recorder
+from aws_xray_sdk.core import patch_all
 
+xray_recorder.configure(service='Overlay')
+plugins = ('EC2Plugin')
+xray_recorder.configure(plugins=plugins)
+patch_all()
 dynamodb = boto3.resource('dynamodb')
 
 

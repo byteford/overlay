@@ -4,6 +4,13 @@ import os
 import base64
 from io import BytesIO
 import boto3
+from aws_xray_sdk.core import xray_recorder
+from aws_xray_sdk.core import patch_all
+
+xray_recorder.configure(service='Overlay')
+plugins = ('EC2Plugin')
+xray_recorder.configure(plugins=plugins)
+patch_all()
 logging.basicConfig(level=logging.DEBUG)
 logging.info("starting")
 
