@@ -24,6 +24,16 @@ resource "aws_api_gateway_rest_api" "overlay" {
           }
         }
       }
+      "/${local.lowerthird_generator_url}" = {
+        any = {
+            x-amazon-apigateway-integration = {
+            httpMethod           = "ANY"
+            payloadFormatVersion = "1.0"
+            type                 = "AWS_PROXY"
+            uri                  = aws_lambda_function.lowerthird_generator.invoke_arn
+          }
+        }
+      }
     }
   })
 
@@ -32,4 +42,22 @@ resource "aws_api_gateway_rest_api" "overlay" {
   endpoint_configuration {
     types = ["REGIONAL"]
   }
+}
+
+resource "aws_api_gateway_deployment" "overlay" {
+  rest_api_id = aws_api_gateway_rest_api.overlay.id
+
+  triggers = {
+    redeployment = sha1(jsonencode(aws_api_gateway_rest_api.overlay.body))
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_api_gateway_stage" "overlay" {
+  deployment_id = aws_api_gateway_deployment.overlay.id
+  rest_api_id   = aws_api_gateway_rest_api.overlay.id
+  stage_name    = "overlay"
 }
