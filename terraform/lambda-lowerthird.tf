@@ -77,13 +77,13 @@ data "archive_file" "lowerthird_generator" {
 }
 */
 resource "aws_lambda_function" "lowerthird_generator" {
-  filename         = "../lowerthird_generator/lambda_function.zip"
+  filename         = "../lowerthird_generator/lowerthird_generator.zip"
   function_name = "lowerthird_generator"
   role          = aws_iam_role.lowerthird_generator.arn
   timeout       = 10
-  handler          = "lambda_function.lambda_handler"
+  handler          = "lambda_function"
   runtime          = "go1.x"
-  source_code_hash = filesha256("../lowerthird_generator/lambda_function.zip")
+  source_code_hash = filesha256("../lowerthird_generator/lowerthird_generator.zip")
   environment {
     variables = {
       font_bucket  = var.bucket_location
