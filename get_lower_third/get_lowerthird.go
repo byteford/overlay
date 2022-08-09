@@ -12,11 +12,17 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+	"github.com/aws/aws-xray-sdk-go/xray"
 )
 
+type Text struct {
+	Name   string
+	Role   string
+	Social string
+}
 type Item struct {
 	Index string
-	Text  string
+	Text  Text
 }
 type QueryStringParameters struct {
 	Index string `json:"index"`
@@ -25,7 +31,7 @@ type Request struct {
 	QSP QueryStringParameters `json:"queryStringParameters"`
 }
 
-func HandleRequest(ctx context.Context, req Request) (string, error) {
+func HandleRequest(ctx context.Context, req Request) (Text, error) {
 	tableName := os.Getenv("lowerthird_table")
 	if tableName == "" {
 		tableName = "lowerthird"
@@ -36,12 +42,12 @@ func HandleRequest(ctx context.Context, req Request) (string, error) {
 	}))
 
 	svc := dynamodb.New(sess)
-
-	result, err := svc.GetItem(&dynamodb.GetItemInput{
+	xray.AWS(svc.Client)
+	result, err := svc.GetItemWithContext(ctx, &dynamodb.GetItemInput{
 		TableName: aws.String(tableName),
 		Key: map[string]*dynamodb.AttributeValue{
 			"Index": {
-				S: aws.String("0"),
+				S: aws.String(req.QSP.Index),
 			},
 		},
 	})
@@ -49,16 +55,17 @@ func HandleRequest(ctx context.Context, req Request) (string, error) {
 		log.Fatalf("Got error calling getItem: %s", err)
 	}
 	if result.Item == nil {
-		return "", errors.New("Could not find")
+		return Text{}, errors.New("could not find")
 	}
 
 	item := Item{}
-
+	fmt.Println(item)
 	err = dynamodbattribute.UnmarshalMap(result.Item, &item)
 	if err != nil {
 		panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
 	}
-	return fmt.Sprintf("%s", item.Text), nil
+	log.Printf("%v", item.Text)
+	return item.Text, nil
 }
 
 func main() {
