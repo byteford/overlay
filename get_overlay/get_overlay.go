@@ -16,43 +16,43 @@ import (
 )
 
 type Style struct {
-	Right    string `json:"right"`
-	Position string `json:"position"`
-	Top      string `json:"Top"`
-	Left     string `json:"left`
+	Right    string `json:"right,omitempty"`
+	Position string `json:"position,omitempty"`
+	Top      string `json:"top,omitempty"`
+	Left     string `json:"left,omitempty"`
 }
 type Config struct {
-	Image struct {
-		Key string
-	}
-	Name struct {
-		X         string
-		Y         string
-		Font_size string
-	}
-	Role struct {
-		X         string
-		Y         string
-		Font_size string
-	}
-	Social struct {
-		X         string
-		Y         string
-		Font_size string
-	}
+	Image *struct {
+		Key string `json:"Key,omitempty"`
+	} `json:"Image,omitempty"`
+	Name *struct {
+		X         string `json:"X,omitempty"`
+		Y         string `json:"Y,omitempty"`
+		Font_size string `json:"Font_size,omitempty"`
+	} `json:"Name,omitempty"`
+	Role *struct {
+		X         string `json:"X,omitempty"`
+		Y         string `json:"Y,omitempty"`
+		Font_size string `json:"Font_size,omitempty"`
+	} `json:"Role,omitempty"`
+	Social *struct {
+		X         string `json:"X,omitempty"`
+		Y         string `json:"Y,omitempty"`
+		Font_size string `json:"Font_size,omitempty"`
+	} `json:"Social,omitempty"`
 }
 type Lowerthird struct {
-	Lowerthird string
-	Style      Style
-	Config     Config `json:"config"`
+	Lowerthird string  `json:"Lowerthird,omitempty"`
+	Style      *Style  `json:"Style,omitempty"`
+	Config     *Config `json:"config,omitempty"`
 }
 type Overlay struct {
-	LowerthirdLeft  []Lowerthird `json:"lowerthirdLeft"`
-	LowerthirdRight []Lowerthird `json:"lowerthirdright"`
+	LowerthirdLeft  *Lowerthird `json:"lowerthirdLeft,omitempty"`
+	LowerthirdRight *Lowerthird `json:"lowerthirdright,omitempty"`
 }
 type Item struct {
 	Index   string
-	Overlay []Overlay
+	Overlay Overlay
 }
 type QueryStringParameters struct {
 	Overlay string `json:"overlay"`
@@ -61,7 +61,7 @@ type Request struct {
 	QSP QueryStringParameters `json:"queryStringParameters"`
 }
 
-func HandleRequest(ctx context.Context, req Request) ([]Overlay, error) {
+func HandleRequest(ctx context.Context, req Request) (Overlay, error) {
 	tableName := os.Getenv("overlay_table")
 	if tableName == "" {
 		tableName = "overlay"
@@ -85,11 +85,11 @@ func HandleRequest(ctx context.Context, req Request) ([]Overlay, error) {
 		log.Fatalf("Got error calling getItem: %s", err)
 	}
 	if result.Item == nil {
-		return []Overlay{}, errors.New("could not find")
+		return Overlay{}, errors.New("could not find")
 	}
 
 	item := Item{}
-	fmt.Println(item)
+	fmt.Println(result.Item)
 	err = dynamodbattribute.UnmarshalMap(result.Item, &item)
 	if err != nil {
 		panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
