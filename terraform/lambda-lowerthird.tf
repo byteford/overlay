@@ -69,21 +69,21 @@ resource "aws_iam_role_policy_attachment" "lowerthird_generator" {
   role       = aws_iam_role.lowerthird_generator.name
   policy_arn = aws_iam_policy.lowerthird_generator.arn
 }
-
+/*
 data "archive_file" "lowerthird_generator" {
   type        = "zip"
   source_file = "../lowerthird_generator/lambda_function.py"
   output_path = "../lowerthird_generator/lambda_function.zip"
 }
+*/
 resource "aws_lambda_function" "lowerthird_generator" {
-  filename         = data.archive_file.lowerthird_generator.output_path
+  filename         = "../lowerthird_generator/lambda_function.zip"
   function_name = "lowerthird_generator"
   role          = aws_iam_role.lowerthird_generator.arn
   timeout       = 10
   handler          = "lambda_function.lambda_handler"
-  runtime          = "python3.9"
-  source_code_hash = data.archive_file.lowerthird_generator.output_base64sha256
-  layers = [data.aws_lambda_layer_version.xray.arn,data.aws_lambda_layer_version.pillow.arn]
+  runtime          = "go1.x"
+  source_code_hash = filesha256("../lowerthird_generator/lambda_function.zip")
   environment {
     variables = {
       font_bucket  = var.bucket_location
