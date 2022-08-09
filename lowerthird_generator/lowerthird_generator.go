@@ -10,6 +10,8 @@ import (
 	"image/draw"
 	"image/png"
 	"log"
+	"os"
+	"strconv"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -59,7 +61,7 @@ func loadImage(img image.Image) image.NRGBA {
 	draw.Draw(bgImg, img.Bounds(), img, image.Point{}, draw.Over)
 	return *bgImg
 }
-func loadfont(buf []byte, bgImg *image.NRGBA, size float64) *freetype.Context {
+func loadfont(buf []byte, bgImg *image.NRGBA, size float64, colour *image.Uniform) *freetype.Context {
 	c := freetype.NewContext()
 	font, err := freetype.ParseFont(buf)
 	if err != nil {
@@ -69,7 +71,7 @@ func loadfont(buf []byte, bgImg *image.NRGBA, size float64) *freetype.Context {
 	c.SetFont(font)
 	c.SetDst(bgImg)
 	c.SetClip(bgImg.Bounds())
-	c.SetSrc(image.Black)
+	c.SetSrc(colour)
 	return c
 }
 
@@ -87,7 +89,7 @@ func HandleRequest(ctx context.Context, req Request) (events.APIGatewayProxyResp
 	svc := s3.New(session.Must(session.NewSession()))
 	xray.AWS(svc.Client)
 	downloader := s3manager.NewDownloaderWithClient(svc)
-	buf, err := download_from_s3(ctx, downloader, "dpg-overlay", "dpg lower third300.png")
+	buf, err := download_from_s3(ctx, downloader, os.Getenv("image_bucket"), req.QSP.Image_key)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -98,12 +100,29 @@ func HandleRequest(ctx context.Context, req Request) (events.APIGatewayProxyResp
 	}
 	bgImg := loadImage(img)
 
-	/*buf, err = download_from_s3(downloader, "dpg-overlay", "Roboto-Black.ttf")
+	buf, err = download_from_s3(ctx, downloader, os.Getenv("font_bucket"), os.Getenv("font_key"))
 	if err != nil {
 		log.Fatal(err)
 	}
-	c := loadfont(buf, bgImg, 15)
-	addText(bgImg, c, "Delivery Consoltand", 92, 48, 15)*/
+
+	x, _ := strconv.Atoi(req.QSP.NameLocX)
+	y, _ := strconv.Atoi(req.QSP.NameLocY)
+	size, _ := strconv.Atoi(req.QSP.NameSize)
+	c := loadfont(buf, &bgImg, float64(size), image.Black)
+	addText(&bgImg, c, req.QSP.Name, x, y, float64(size))
+
+	x, _ = strconv.Atoi(req.QSP.RoleLocX)
+	y, _ = strconv.Atoi(req.QSP.RoleLocY)
+	size, _ = strconv.Atoi(req.QSP.RoleSize)
+	c = loadfont(buf, &bgImg, float64(size), image.Black)
+	addText(&bgImg, c, req.QSP.Role, x, y, float64(size))
+
+	x, _ = strconv.Atoi(req.QSP.SocialLocX)
+	y, _ = strconv.Atoi(req.QSP.SocialLocY)
+	size, _ = strconv.Atoi(req.QSP.SocialSize)
+	c = loadfont(buf, &bgImg, float64(size), image.White)
+	addText(&bgImg, c, req.QSP.Social, x, y, float64(size))
+
 	var out bytes.Buffer
 	png.Encode(&out, &bgImg)
 	return events.APIGatewayProxyResponse{Headers: map[string]string{"Content-type": "image/png"}, Body: base64.StdEncoding.EncodeToString(out.Bytes()), StatusCode: 200, IsBase64Encoded: true}, err
