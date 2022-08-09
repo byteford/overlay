@@ -303,13 +303,10 @@ data "archive_file" "get_current_overlay" {
 }
 
 resource "aws_lambda_function" "get_current_overlay" {
-  filename         = data.archive_file.get_current_overlay.output_path
   function_name    = "get_current_overlay"
   role             = aws_iam_role.get_current_overlay.arn
   timeout          = 10
-  handler          = "get_current_overlay.lambda_handler"
-  runtime          = "python3.9"
-  source_code_hash = data.archive_file.get_current_overlay.output_base64sha256
+  runtime          = "go1.x"
   layers = [data.aws_lambda_layer_version.xray.arn]
 
   environment {
