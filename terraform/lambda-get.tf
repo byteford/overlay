@@ -310,7 +310,6 @@ resource "aws_lambda_function" "get_current_overlay" {
   timeout          = 10
   runtime          = "go1.x"
   source_code_hash = filesha256("../get_current_overlay/get_current_overlay.zip")
-  layers = [data.aws_lambda_layer_version.xray.arn]
 
   environment {
     variables = {
