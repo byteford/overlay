@@ -70,22 +70,21 @@ resource "aws_iam_role_policy_attachment" "get_lowerthird" {
   role       = aws_iam_role.get_lowerthird.name
   policy_arn = aws_iam_policy.get_lowerthird.arn
 }
-
+/*
 data "archive_file" "get_lowerthird" {
   type        = "zip"
   source_file = "../get_lower_third/get_lowerthird.py"
   output_path = "../get_lower_third/get_lowerthird.zip"
 }
-
+*/
 resource "aws_lambda_function" "get_lowerthird" {
-  filename         = data.archive_file.get_lowerthird.output_path
+  filename         = "../get_lower_third/get_lowerthird.zip"
   function_name    = "get_lowerthird"
   role             = aws_iam_role.get_lowerthird.arn
   timeout          = 10
-  handler          = "get_lowerthird.lambda_handler"
-  runtime          = "python3.9"
-  source_code_hash = data.archive_file.get_lowerthird.output_base64sha256
-  layers = [data.aws_lambda_layer_version.xray.arn]
+  handler          = "get_lowerthird"
+  runtime          = "go1.x"
+  source_code_hash = filesha256("../get_lower_third/get_lowerthird.zip")
   environment {
     variables = {
       lowerthird_table = aws_dynamodb_table.lowerthird.name
