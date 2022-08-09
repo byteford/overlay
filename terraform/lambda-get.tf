@@ -295,18 +295,20 @@ resource "aws_iam_role_policy_attachment" "get_current_overlay" {
   role       = aws_iam_role.get_current_overlay.name
   policy_arn = aws_iam_policy.get_current_overlay.arn
 }
-
+/*
 data "archive_file" "get_current_overlay" {
   type        = "zip"
   source_file = "../get_current_overlay/get_current_overlay.py"
   output_path = "../get_current_overlay/get_current_overlay.zip"
 }
-
+*/
 resource "aws_lambda_function" "get_current_overlay" {
+  filename         = "../get_current_overlay/get_current_overlay.zip"
   function_name    = "get_current_overlay"
   role             = aws_iam_role.get_current_overlay.arn
   timeout          = 10
   runtime          = "go1.x"
+  source_code_hash = filesha256("../get_current_overlay/get_current_overlay.zip")
   layers = [data.aws_lambda_layer_version.xray.arn]
 
   environment {
