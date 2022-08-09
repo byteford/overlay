@@ -71,22 +71,21 @@ resource "aws_iam_role_policy_attachment" "put_current_overlay" {
   role       = aws_iam_role.put_current_overlay.name
   policy_arn = aws_iam_policy.put_current_overlay.arn
 }
-
+/*
 data "archive_file" "put_current_overlay" {
   type        = "zip"
   source_file = "../put_current_overlay/put_current_overlay.py"
   output_path = "../put_current_overlay/put_current_overlay.zip"
 }
-
+*/
 resource "aws_lambda_function" "put_current_overlay" {
-  filename         = data.archive_file.put_current_overlay.output_path
+  filename         = "../put_current_overlay/put_current_overlay.zip"
   function_name    = "put_current_overlay"
   role             = aws_iam_role.put_current_overlay.arn
   timeout          = 10
-  handler          = "put_current_overlay.lambda_handler"
-  runtime          = "python3.9"
-  source_code_hash = data.archive_file.put_current_overlay.output_base64sha256
-  layers = [data.aws_lambda_layer_version.xray.arn]
+  handler          = "put_current_overlay"
+  runtime          = "go1.x"
+  source_code_hash = filesha256("../put_current_overlay/put_current_overlay.zip")
 
   environment {
     variables = {
