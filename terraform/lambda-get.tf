@@ -306,6 +306,7 @@ resource "aws_lambda_function" "get_current_overlay" {
   filename         = "../get_current_overlay/get_current_overlay.zip"
   function_name    = "get_current_overlay"
   role             = aws_iam_role.get_current_overlay.arn
+  handler          = "get_current_overlay"
   timeout          = 10
   runtime          = "go1.x"
   source_code_hash = filesha256("../get_current_overlay/get_current_overlay.zip")
