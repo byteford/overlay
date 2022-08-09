@@ -74,8 +74,9 @@ resource "aws_lambda_function" "ws_connect" {
   role             = aws_iam_role.ws_connect.arn
   timeout          = 10
   handler          = "ws_connect.lambda_handler"
-  runtime          = "python3.8"
+  runtime          = "python3.9"
   source_code_hash = data.archive_file.ws_connect.output_base64sha256
+  layers = [data.aws_lambda_layer_version.xray.arn]
   environment {
     variables = {
       overlay_table = aws_dynamodb_table.current_overlay.name
