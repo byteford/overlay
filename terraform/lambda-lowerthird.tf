@@ -81,7 +81,7 @@ resource "aws_lambda_function" "lowerthird_generator" {
   function_name = "lowerthird_generator"
   role          = aws_iam_role.lowerthird_generator.arn
   timeout       = 10
-  handler          = "lambda_function"
+  handler          = "lowerthird_generator"
   runtime          = "go1.x"
   source_code_hash = filesha256("../lowerthird_generator/lowerthird_generator.zip")
   environment {
