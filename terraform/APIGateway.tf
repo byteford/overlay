@@ -1,6 +1,6 @@
 resource "aws_apigatewayv2_api" "this" {
   name          = "overlay"
-  protocol_type = "HTTP"
+  protocol_type = "REST"
   cors_configuration {
     allow_origins = ["*"]
     allow_headers = ["*"]
