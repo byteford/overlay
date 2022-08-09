@@ -181,22 +181,21 @@ resource "aws_iam_role_policy_attachment" "get_overlay" {
   role       = aws_iam_role.get_overlay.name
   policy_arn = aws_iam_policy.get_overlay.arn
 }
-
+/*
 data "archive_file" "get_overlay" {
   type        = "zip"
   source_file = "../get_overlay/get_overlay.py"
   output_path = "../get_overlay/get_overlay.zip"
 }
-
+*/
 resource "aws_lambda_function" "get_overlay" {
-  filename         = data.archive_file.get_overlay.output_path
+  filename         = "../get_overlay/get_overlay.zip"
   function_name    = "get_overlay"
   role             = aws_iam_role.get_overlay.arn
   timeout          = 10
-  handler          = "get_overlay.lambda_handler"
-  runtime          = "python3.9"
-  source_code_hash = data.archive_file.get_overlay.output_base64sha256
-  layers = [data.aws_lambda_layer_version.xray.arn]
+  handler          = "get_overlay"
+  runtime          = "go1.x"
+  source_code_hash = filesha256("../get_overlay/get_overlay.zip")
 
   environment {
     variables = {

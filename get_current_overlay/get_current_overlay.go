@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"log"
@@ -11,6 +12,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+	"github.com/aws/aws-xray-sdk-go/xray"
 )
 
 type Item struct {
@@ -18,7 +20,7 @@ type Item struct {
 	Value string
 }
 
-func HandleRequest() (string, error) {
+func HandleRequest(ctx context.Context) (string, error) {
 	tableName := os.Getenv("table")
 	if tableName == "" {
 		tableName = "current_overlay"
@@ -29,8 +31,8 @@ func HandleRequest() (string, error) {
 	}))
 
 	svc := dynamodb.New(sess)
-
-	result, err := svc.GetItem(&dynamodb.GetItemInput{
+	xray.AWS(svc.Client)
+	result, err := svc.GetItemWithContext(ctx, &dynamodb.GetItemInput{
 		TableName: aws.String(tableName),
 		Key: map[string]*dynamodb.AttributeValue{
 			"Index": {
