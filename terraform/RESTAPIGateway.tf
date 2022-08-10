@@ -11,7 +11,7 @@ resource "aws_api_gateway_rest_api" "overlay" {
           x-amazon-apigateway-integration = {
             httpMethod           = "GET"
             payloadFormatVersion = "1.0"
-            type                 = "AWS_PROXY"
+            type                 = "AWS"
             uri                  = aws_lambda_function.get_current_overlay.invoke_arn
           }
         }
@@ -19,17 +19,17 @@ resource "aws_api_gateway_rest_api" "overlay" {
           x-amazon-apigateway-integration = {
             httpMethod           = "POST"
             payloadFormatVersion = "1.0"
-            type                 = "AWS_PROXY"
+            type                 = "AWS"
             uri                  = aws_lambda_function.put_current_overlay.invoke_arn
           }
         }
       }
       "/${local.lowerthird_generator_url}" = {
-        any = {
+        get = {
             x-amazon-apigateway-integration = {
-            httpMethod           = "ANY"
+            httpMethod           = "GET"
             payloadFormatVersion = "1.0"
-            type                 = "AWS_PROXY"
+            type                 = "AWS"
             uri                  = aws_lambda_function.lowerthird_generator.invoke_arn
           }
         }
