@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        function: [get_current_overlay, get_overlay, lowerthird_generator, put_current_overlay]
+        function: [get_current_overlay, get_overlay, lowerthird_generator, put_current_overlay, get_lower_third]
     steps:
       - name: checkout source code
         uses: actions/checkout@v1

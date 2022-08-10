@@ -78,11 +78,11 @@ data "archive_file" "get_lowerthird" {
 }
 */
 resource "aws_lambda_function" "get_lowerthird" {
-  filename         = "../get_lower_third/get_lowerthird.zip"
-  function_name    = "get_lowerthird"
+  filename         = "../get_lower_third/get_lower_third.zip"
+  function_name    = "get_lower_third"
   role             = aws_iam_role.get_lowerthird.arn
   timeout          = 10
-  handler          = "get_lowerthird"
+  handler          = "get_lower_third"
   runtime          = "go1.x"
   source_code_hash = sha256("Not Used")
   environment {
