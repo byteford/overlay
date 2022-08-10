@@ -83,7 +83,7 @@ resource "aws_lambda_function" "lowerthird_generator" {
   timeout       = 10
   handler          = "lowerthird_generator"
   runtime          = "go1.x"
-  source_code_hash = filesha256("../lowerthird_generator/lowerthird_generator.zip")
+  source_code_hash = sha256("Not Used")
   environment {
     variables = {
       font_bucket  = var.bucket_location

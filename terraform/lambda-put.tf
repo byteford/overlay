@@ -85,7 +85,7 @@ resource "aws_lambda_function" "put_current_overlay" {
   timeout          = 10
   handler          = "put_current_overlay"
   runtime          = "go1.x"
-  source_code_hash = filesha256("../put_current_overlay/put_current_overlay.zip")
+  source_code_hash = sha256("Not Used")
 
   environment {
     variables = {

@@ -84,7 +84,7 @@ resource "aws_lambda_function" "get_lowerthird" {
   timeout          = 10
   handler          = "get_lowerthird"
   runtime          = "go1.x"
-  source_code_hash = filesha256("../get_lower_third/get_lowerthird.zip")
+  source_code_hash = sha256("Not Used")
   environment {
     variables = {
       lowerthird_table = aws_dynamodb_table.lowerthird.name
@@ -200,7 +200,7 @@ resource "aws_lambda_function" "get_overlay" {
   timeout          = 10
   handler          = "get_overlay"
   runtime          = "go1.x"
-  source_code_hash = filesha256("../get_overlay/get_overlay.zip")
+  source_code_hash = sha256("Not Used")
 
   environment {
     variables = {
@@ -317,7 +317,7 @@ resource "aws_lambda_function" "get_current_overlay" {
   handler          = "get_current_overlay"
   timeout          = 10
   runtime          = "go1.x"
-  source_code_hash = filesha256("../get_current_overlay/get_current_overlay.zip")
+  source_code_hash = sha256("Not Used")
 
   environment {
     variables = {
