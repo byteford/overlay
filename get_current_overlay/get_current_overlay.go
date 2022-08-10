@@ -2,11 +2,12 @@ package main
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 
+	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -20,7 +21,7 @@ type Item struct {
 	Value string
 }
 
-func HandleRequest(ctx context.Context) (string, error) {
+func HandleRequest(ctx context.Context) events.APIGatewayProxyResponse {
 	tableName := os.Getenv("table")
 	if tableName == "" {
 		tableName = "current_overlay"
@@ -44,7 +45,7 @@ func HandleRequest(ctx context.Context) (string, error) {
 		log.Fatalf("Got error calling getItem: %s", err)
 	}
 	if result.Item == nil {
-		return "", errors.New("Could not find")
+		return events.APIGatewayProxyResponse{StatusCode: http.StatusNotFound}
 	}
 
 	item := Item{}
@@ -53,7 +54,7 @@ func HandleRequest(ctx context.Context) (string, error) {
 	if err != nil {
 		panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
 	}
-	return fmt.Sprintf("%s", item.Value), nil
+	return events.APIGatewayProxyResponse{Body: item.Value}
 }
 
 func main() {
