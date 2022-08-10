@@ -21,7 +21,7 @@ type Item struct {
 	Value string
 }
 
-func HandleRequest(ctx context.Context) events.APIGatewayProxyResponse {
+func HandleRequest(ctx context.Context) (events.APIGatewayProxyResponse, error) {
 	tableName := os.Getenv("table")
 	if tableName == "" {
 		tableName = "current_overlay"
@@ -45,7 +45,7 @@ func HandleRequest(ctx context.Context) events.APIGatewayProxyResponse {
 		log.Fatalf("Got error calling getItem: %s", err)
 	}
 	if result.Item == nil {
-		return events.APIGatewayProxyResponse{StatusCode: http.StatusNotFound}
+		return events.APIGatewayProxyResponse{StatusCode: http.StatusNotFound}, fmt.Errorf("no item found")
 	}
 
 	item := Item{}
@@ -54,7 +54,7 @@ func HandleRequest(ctx context.Context) events.APIGatewayProxyResponse {
 	if err != nil {
 		panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
 	}
-	return events.APIGatewayProxyResponse{Body: item.Value}
+	return events.APIGatewayProxyResponse{Body: item.Value}, nil
 }
 
 func main() {
