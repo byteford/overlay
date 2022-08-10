@@ -86,7 +86,12 @@ resource "aws_lambda_function" "ws_connect" {
   tracing_config {
     mode = "Active"
   }
-
+  lifecycle {
+    ignore_changes = [
+      source_code_hash,
+      filename
+    ]
+  }
 }
 
 resource "aws_lambda_permission" "ws_connect" {

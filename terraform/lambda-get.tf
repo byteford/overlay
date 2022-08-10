@@ -93,7 +93,12 @@ resource "aws_lambda_function" "get_lowerthird" {
   tracing_config {
     mode = "Active"
   }
-
+  lifecycle {
+    ignore_changes = [
+      source_code_hash,
+      filename
+    ]
+  }
 }
 
 resource "aws_lambda_permission" "get_lowerthird" {
@@ -206,7 +211,12 @@ resource "aws_lambda_function" "get_overlay" {
   tracing_config {
     mode = "Active"
   }
-
+  lifecycle {
+    ignore_changes = [
+      source_code_hash,
+      filename
+    ]
+  }
 }
 
 resource "aws_lambda_permission" "get_overlay" {
@@ -318,7 +328,12 @@ resource "aws_lambda_function" "get_current_overlay" {
   tracing_config {
     mode = "Active"
   }
-
+  lifecycle {
+    ignore_changes = [
+      source_code_hash,
+      filename
+    ]
+  }
 }
 
 resource "aws_lambda_permission" "get_current_overlay" {

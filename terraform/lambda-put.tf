@@ -96,7 +96,12 @@ resource "aws_lambda_function" "put_current_overlay" {
   tracing_config {
     mode = "Active"
   }
-
+  lifecycle {
+    ignore_changes = [
+      source_code_hash,
+      filename
+    ]
+  }
 }
 
 resource "aws_lambda_permission" "put_current_overlay" {
