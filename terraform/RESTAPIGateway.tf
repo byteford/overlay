@@ -9,7 +9,7 @@ resource "aws_api_gateway_rest_api" "overlay" {
       "/current_overlay" = {
         get = {
           x-amazon-apigateway-integration = {
-            httpMethod           = "GET"
+            httpMethod           = "POST"
             payloadFormatVersion = "1.0"
             type                 = "AWS"
             uri                  = aws_lambda_function.get_current_overlay.invoke_arn
@@ -27,7 +27,7 @@ resource "aws_api_gateway_rest_api" "overlay" {
       "/${local.lowerthird_generator_url}" = {
         get = {
             x-amazon-apigateway-integration = {
-            httpMethod           = "GET"
+            httpMethod           = "POST"
             payloadFormatVersion = "1.0"
             type                 = "AWS"
             uri                  = aws_lambda_function.lowerthird_generator.invoke_arn
