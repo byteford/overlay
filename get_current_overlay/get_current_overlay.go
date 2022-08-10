@@ -54,7 +54,7 @@ func HandleRequest(ctx context.Context) (events.APIGatewayProxyResponse, error) 
 	if err != nil {
 		panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
 	}
-	return events.APIGatewayProxyResponse{Body: item.Value}, nil
+	return events.APIGatewayProxyResponse{StatusCode: http.StatusOK, Body: item.Value}, nil
 }
 
 func main() {
