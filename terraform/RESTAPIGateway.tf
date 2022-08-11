@@ -46,9 +46,29 @@ resource "aws_api_gateway_rest_api" "overlay" {
       }
       "/${local.lowerthird_generator_url}" = {
         get = {
+          produces :["application/json"]
+          responses :{
+            200:{
+              description: "200 response"
+              Schema: {
+                "$ref" : "#definitions/valuejson"
+              }
+              headers :{
+                Access-Control-Allow-Origin:{
+                  type: "string"
+                }
+              }
+            }
+          }
             x-amazon-apigateway-integration = {
             httpMethod           = "POST"
             payloadFormatVersion = "1.0"
+            responses:{
+              default:{
+                statusCode : 200
+              }
+            }
+            passthroughBehavior: "when_no_templates"
             type                 = "AWS"
             uri                  = aws_lambda_function.lowerthird_generator.invoke_arn
           }
