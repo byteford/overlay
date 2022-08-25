@@ -93,7 +93,7 @@ resource "aws_dynamodb_table_item" "overlay1" {
         lowerthirdLeft = {
           M = {
             Lowerthird = {
-              S = "0"
+              S = "1"
             }
             Style  = local.lowerthirdLeft_style
             config = local.lowerthird_config
@@ -115,18 +115,9 @@ resource "aws_dynamodb_table_item" "overlay2" {
         lowerthirdLeft = {
           M = {
             Lowerthird = {
-              S = "1"
+              S = "2"
             }
             Style  = local.lowerthirdLeft_style
-            config = local.lowerthird_config
-          }
-        }
-        lowerthirdright = {
-          M = {
-            Lowerthird = {
-              S = "0"
-            }
-            Style  = local.lowerthirdRight_style
             config = local.lowerthird_config
           }
         }
